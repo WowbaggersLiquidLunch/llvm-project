@@ -552,6 +552,7 @@ private:
   CFGBlock *VisitCaseStmt(CaseStmt *C);
   CFGBlock *VisitChooseExpr(ChooseExpr *C, AddStmtChoice asc);
   CFGBlock *VisitCompoundStmt(CompoundStmt *C, bool ExternallyDestructed);
+  CFGBlock *VisitCXXAtomicStmt(CXXAtomicStmt *DD, bool ExternallyDestructed);
   CFGBlock *VisitConditionalOperator(AbstractConditionalOperator *C,
                                      AddStmtChoice asc);
   CFGBlock *VisitContinueStmt(ContinueStmt *C);
@@ -2235,6 +2236,9 @@ CFGBlock *CFGBuilder::Visit(Stmt * S, AddStmtChoice asc,
     case Stmt::CompoundStmtClass:
       return VisitCompoundStmt(cast<CompoundStmt>(S), ExternallyDestructed);
 
+    case Stmt::CXXAtomicStmtClass:
+      return VisitCXXAtomicStmt(cast<CXXAtomicStmt>(S), ExternallyDestructed);
+
     case Stmt::ConditionalOperatorClass:
       return VisitConditionalOperator(cast<ConditionalOperator>(S), asc);
 
@@ -2830,6 +2834,11 @@ CFGBlock *CFGBuilder::VisitCompoundStmt(CompoundStmt *C,
   }
 
   return LastBlock;
+}
+
+CFGBlock *CFGBuilder::VisitCXXAtomicStmt(CXXAtomicStmt *DD, bool ExternallyDestructed) {
+  // FIXME: Should I do more here, because of the 2 function calls?
+  return VisitCompoundStmt(DD->getBody(), ExternallyDestructed);
 }
 
 CFGBlock *CFGBuilder::VisitConditionalOperator(AbstractConditionalOperator *C,
