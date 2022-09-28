@@ -54,6 +54,9 @@ def CXXForRangeStmt : StmtNode<Stmt>;
 def CoroutineBodyStmt : StmtNode<Stmt>;
 def CoreturnStmt : StmtNode<Stmt>;
 
+// C++ Atomic Statements (Transactional Memory version 2 TS; N4923)
+def CXXAtomicStmt : StmtNode<Stmt>;
+
 // Expressions
 def Expr : StmtNode<ValueStmt, 1>;
 def PredefinedExpr : StmtNode<Expr>;

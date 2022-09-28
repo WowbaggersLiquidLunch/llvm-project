@@ -165,6 +165,12 @@ void ASTStmtReader::VisitCompoundStmt(CompoundStmt *S) {
   S->RBraceLoc = readSourceLocation();
 }
 
+void ASTStmtReader::VisitCXXAtomicStmt(CXXAtomicStmt *S) {
+  VisitStmt(S);
+  S->setBody(cast<CompoundStmt>(Record.readSubStmt()));
+  S->setALoc(readSourceLocation());
+}
+
 void ASTStmtReader::VisitSwitchCase(SwitchCase *S) {
   VisitStmt(S);
   Record.recordSwitchCaseID(S, Record.readInt());
@@ -2822,6 +2828,10 @@ Stmt *ASTReader::ReadStmtFromStream(ModuleFile &F) {
       S = CompoundStmt::CreateEmpty(
           Context, /*NumStmts=*/Record[ASTStmtReader::NumStmtFields],
           /*HasFPFeatures=*/Record[ASTStmtReader::NumStmtFields + 1]);
+      break;
+
+    case STMT_CXX_Atomic:
+      S = new (Context) CXXAtomicStmt(Empty);
       break;
 
     case STMT_CASE:

@@ -1,10 +1,10 @@
 // Test without serialization:
-// RUN: %clang_cc1 -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -ast-dump %s \
+// RUN: %clang_cc1 -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -ftm-ts -ast-dump %s \
 // RUN: | FileCheck -strict-whitespace %s
 //
 // Test with serialization:
-// RUN: %clang_cc1 -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -emit-pch -o %t %s
-// RUN: %clang_cc1 -x c++ -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -include-pch %t -ast-dump-all /dev/null \
+// RUN: %clang_cc1 -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -ftm-ts -emit-pch -o %t %s
+// RUN: %clang_cc1 -x c++ -std=c++2b -triple x86_64-linux-gnu -fcxx-exceptions -ftm-ts -include-pch %t -ast-dump-all /dev/null \
 // RUN: | sed -e "s/ <undeserialized declarations>//" -e "s/ imported//" \
 // RUN: | FileCheck -strict-whitespace %s
 
@@ -289,4 +289,10 @@ void TestIteration() {
   // CHECK-NEXT: ImplicitCastExpr
   // CHECK-NEXT: DeclRefExpr 0x{{[^ ]*}} <col:21> 'int *':'int *' lvalue Var 0x{{[^ ]*}} '__begin1' 'int *':'int *'
   // CHECK-NEXT: NullStmt
+}
+
+// C++ Transactional Memory TS N4923
+void TestCxxAtomic() {
+  atomic do {}
+  // CHECK: CXXAtomicStmt 0x{{[^ ]*}} <line:[[@LINE-1]]:3, col:14>
 }

@@ -454,6 +454,11 @@ StmtResult Sema::ActOnCompoundStmt(SourceLocation L, SourceLocation R,
   return CompoundStmt::Create(Context, Elts, FPDiff, L, R);
 }
 
+StmtResult Sema::ActOnCXXAtomicStmt(clang::SourceLocation ALoc,
+                                    CompoundStmt *Body) {
+  return new (Context) CXXAtomicStmt(Body, ALoc);
+}
+
 ExprResult
 Sema::ActOnCaseExpr(SourceLocation CaseLoc, ExprResult Val) {
   if (!Val.get())

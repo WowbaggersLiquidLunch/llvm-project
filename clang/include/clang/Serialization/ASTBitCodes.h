@@ -1553,6 +1553,9 @@ enum StmtCode {
   /// A CompoundStmt record.
   STMT_COMPOUND,
 
+  /// A CXXAtomicStmt record.
+  STMT_CXX_Atomic,
+
   /// A CaseStmt record.
   STMT_CASE,
 

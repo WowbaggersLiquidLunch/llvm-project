@@ -138,6 +138,15 @@ protected:
     unsigned NumStmts;
   };
 
+  class CXXAtomicStmtBitfields {
+    friend class CXXAtomicStmt;
+
+    unsigned : NumStmtBits;
+
+    /// The location of the "atomic".
+    SourceLocation ALoc;
+  };
+
   class LabelStmtBitfields {
     friend class LabelStmt;
 
@@ -1019,6 +1028,7 @@ protected:
     StmtBitfields StmtBits;
     NullStmtBitfields NullStmtBits;
     CompoundStmtBitfields CompoundStmtBits;
+    CXXAtomicStmtBitfields CXXAtomicStmtBits;
     LabelStmtBitfields LabelStmtBits;
     AttributedStmtBitfields AttributedStmtBits;
     IfStmtBitfields IfStmtBits;

@@ -1331,6 +1331,14 @@ public:
                                        IsStmtExpr);
   }
 
+  /// Build a new atomic statement.
+  ///
+  /// By default, performs semantic analysis to build the new statement.
+  /// Subclasses may override this routine to provide different behavior.
+  StmtResult RebuildCXXAtomicStmt(SourceLocation ALoc, CompoundStmt *Body) {
+    return getSema().ActOnCXXAtomicStmt(ALoc, Body);
+  }
+
   /// Build a new case statement.
   ///
   /// By default, performs semantic analysis to build the new statement.
@@ -7482,6 +7490,17 @@ TreeTransform<Derived>::TransformCompoundStmt(CompoundStmt *S,
                                           Statements,
                                           S->getRBracLoc(),
                                           IsStmtExpr);
+}
+
+template<typename Derived>
+StmtResult
+TreeTransform<Derived>::TransformCXXAtomicStmt(CXXAtomicStmt *S) {
+  // Transform the body
+  StmtResult Body = getDerived().TransformStmt(S->getBody());
+  if (Body.isInvalid())
+    return StmtError();
+  return getDerived().RebuildCXXAtomicStmt(S->getALoc(),
+                                           cast<CompoundStmt>(Body.get()));
 }
 
 template<typename Derived>

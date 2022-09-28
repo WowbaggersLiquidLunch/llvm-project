@@ -91,6 +91,13 @@ void ASTStmtWriter::VisitCompoundStmt(CompoundStmt *S) {
   Code = serialization::STMT_COMPOUND;
 }
 
+void ASTStmtWriter::VisitCXXAtomicStmt(CXXAtomicStmt *S) {
+  VisitStmt(S);
+  Record.AddStmt(S->getBody());
+  Record.AddSourceLocation(S->getALoc());
+  Code = serialization::STMT_CXX_Atomic;
+}
+
 void ASTStmtWriter::VisitSwitchCase(SwitchCase *S) {
   VisitStmt(S);
   Record.push_back(Writer.getSwitchCaseID(S));

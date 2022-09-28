@@ -92,6 +92,10 @@ public:
         return false;
     return true;
   }
+  bool VisitCXXAtomicStmt(CXXAtomicStmt *S) {
+    // Transactions act as memory fences even if the body is empty.
+    return false;
+  }
   bool VisitIfStmt(IfStmt *S) {
     if (S->getConditionVariable())
       return false;

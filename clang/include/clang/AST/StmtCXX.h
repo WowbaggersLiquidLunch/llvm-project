@@ -512,6 +512,38 @@ public:
   }
 };
 
+/// Represents an `atomic do` statement (C++ Transactional Memory version 2 TS;
+/// N4923).
+class CXXAtomicStmt : public Stmt {
+  CompoundStmt *BodyStmt;
+
+public:
+  CXXAtomicStmt(CompoundStmt *Body, SourceLocation ALoc)
+      : Stmt(CXXAtomicStmtClass), BodyStmt(Body) {
+    setALoc(ALoc);
+  }
+  explicit CXXAtomicStmt(EmptyShell Empty) : Stmt(CXXAtomicStmtClass, Empty) {}
+
+  CompoundStmt *getBody() { return BodyStmt; }
+  const CompoundStmt *getBody() const { return BodyStmt; }
+  void setBody(CompoundStmt *Body) { BodyStmt = Body; }
+
+  SourceLocation getALoc() const { return CXXAtomicStmtBits.ALoc; }
+  void setALoc(SourceLocation Loc) { CXXAtomicStmtBits.ALoc = Loc; }
+
+  SourceLocation getBeginLoc() const { return getALoc(); }
+  SourceLocation getEndLoc() const { return BodyStmt->getEndLoc(); }
+
+  // Present the body's sub-statements directly, instead of showing the body
+  // itself first.
+  child_range children() { return BodyStmt->children(); }
+  const_child_range children() const { return BodyStmt->children(); }
+
+  static bool classof(const Stmt *T) {
+    return T->getStmtClass() == CXXAtomicStmtClass;
+  }
+};
+
 }  // end namespace clang
 
 #endif

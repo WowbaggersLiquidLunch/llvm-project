@@ -268,6 +268,12 @@ void StmtPrinter::VisitCompoundStmt(CompoundStmt *Node) {
   OS << "" << NL;
 }
 
+void StmtPrinter::VisitCXXAtomicStmt(CXXAtomicStmt *Node) {
+  Indent() << "atomic do ";
+  PrintRawCompoundStmt(Node->getBody());
+  OS << NL;
+}
+
 void StmtPrinter::VisitCaseStmt(CaseStmt *Node) {
   Indent(-1) << "case ";
   PrintExpr(Node->getLHS());
