@@ -5069,6 +5069,7 @@ static EvalStmtResult EvaluateStmt(StmtResult &Result, EvalInfo &Info,
       // FIXME: Precompute which substatement of a compound statement we
       // would jump to, and go straight there rather than performing a
       // linear scan each time.
+    case Stmt::CXXAtomicStmtClass:
     case Stmt::LabelStmtClass:
     case Stmt::AttributedStmtClass:
     case Stmt::DoStmtClass:
@@ -5257,6 +5258,12 @@ static EvalStmtResult EvaluateStmt(StmtResult &Result, EvalInfo &Info,
       return ESR_CaseNotFound;
     return Scope.destroy() ? ESR_Succeeded : ESR_Failed;
   }
+
+  case Stmt::CXXAtomicStmtClass:
+    // Constant fold the body
+    EvaluateStmt(Result, Info, cast<CXXAtomicStmt>(S)->getBody(), Case);
+    // But don't get this statement itself optimised away.
+    return ESR_Failed;
 
   case Stmt::IfStmtClass: {
     const IfStmt *IS = cast<IfStmt>(S);
