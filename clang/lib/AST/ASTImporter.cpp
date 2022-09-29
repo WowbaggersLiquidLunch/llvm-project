@@ -577,6 +577,7 @@ namespace clang {
     ExpectedStmt VisitDeclStmt(DeclStmt *S);
     ExpectedStmt VisitNullStmt(NullStmt *S);
     ExpectedStmt VisitCompoundStmt(CompoundStmt *S);
+    ExpectedStmt VisitCXXAtomicStmt(CXXAtomicStmt *S);
     ExpectedStmt VisitCaseStmt(CaseStmt *S);
     ExpectedStmt VisitDefaultStmt(DefaultStmt *S);
     ExpectedStmt VisitLabelStmt(LabelStmt *S);
@@ -6538,6 +6539,17 @@ ExpectedStmt ASTNodeImporter::VisitCompoundStmt(CompoundStmt *S) {
       S->hasStoredFPFeatures() ? S->getStoredFPFeatures() : FPOptionsOverride();
   return CompoundStmt::Create(Importer.getToContext(), ToStmts, FPO,
                               *ToLBracLocOrErr, *ToRBracLocOrErr);
+}
+
+ExpectedStmt ASTNodeImporter::VisitCXXAtomicStmt(CXXAtomicStmt *S) {
+
+  Error Err = Error::success();
+  auto ToBody = importChecked(Err, S->getBody());
+  auto ToALoc = importChecked(Err, S->getALoc());
+  if (Err)
+    return std::move(Err);
+
+  return new (Importer.getToContext()) CXXAtomicStmt(ToBody, ToALoc);
 }
 
 ExpectedStmt ASTNodeImporter::VisitCaseStmt(CaseStmt *S) {
