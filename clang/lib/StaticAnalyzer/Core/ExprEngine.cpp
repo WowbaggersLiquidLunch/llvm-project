@@ -1821,6 +1821,7 @@ void ExprEngine::Visit(const Stmt *S, ExplodedNode *Pred,
     case Stmt::BreakStmtClass:
     case Stmt::CaseStmtClass:
     case Stmt::CompoundStmtClass:
+    case Stmt::CXXAtomicStmtClass:
     case Stmt::ContinueStmtClass:
     case Stmt::CXXForRangeStmtClass:
     case Stmt::DefaultStmtClass:
