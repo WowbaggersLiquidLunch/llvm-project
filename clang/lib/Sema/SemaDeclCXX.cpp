@@ -2120,6 +2120,8 @@ CheckConstexprFunctionStmt(Sema &SemaRef, const FunctionDecl *Dcl, Stmt *S,
     return true;
   }
 
+  case Stmt::CXXAtomicStmtClass: return false;
+
   case Stmt::IfStmtClass: {
     // C++1y allows if-statements.
     if (!Cxx1yLoc.isValid())
