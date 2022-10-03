@@ -599,6 +599,8 @@ bool isBodyLikeChildStmt(const Stmt *S, const Stmt *Parent) {
   case Stmt::CaseStmtClass:
   case Stmt::DefaultStmtClass:
     return cast<SwitchCase>(Parent)->getSubStmt() == S;
+  case Stmt::CXXAtomicStmtClass:
+    return cast<CXXAtomicStmt>(Parent)->getBody() == S;
   default:
     return false;
   }
