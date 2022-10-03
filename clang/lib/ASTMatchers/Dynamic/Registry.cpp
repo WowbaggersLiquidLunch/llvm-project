@@ -178,6 +178,7 @@ RegistryMaps::RegistryMaps() {
   REGISTER_MATCHER(coroutineBodyStmt);
   REGISTER_MATCHER(coyieldExpr);
   REGISTER_MATCHER(cudaKernelCallExpr);
+  REGISTER_MATCHER(cxxAtomicStmt);
   REGISTER_MATCHER(cxxBaseSpecifier);
   REGISTER_MATCHER(cxxBindTemporaryExpr);
   REGISTER_MATCHER(cxxBoolLiteral);

@@ -2304,6 +2304,17 @@ extern const internal::VariadicDynCastAllOfMatcher<Stmt, DefaultStmt>
 extern const internal::VariadicDynCastAllOfMatcher<Stmt, CompoundStmt>
     compoundStmt;
 
+/// Matches atomic statements.
+///
+/// Given
+/// \code
+///   atomic do {}
+/// \endcode
+/// cxxAtomicStmt()
+///   matches 'atomic do {}'
+extern const internal::VariadicDynCastAllOfMatcher<Stmt, CXXAtomicStmt>
+    cxxAtomicStmt;
+
 /// Matches catch statements.
 ///
 /// \code

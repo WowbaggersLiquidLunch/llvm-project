@@ -910,6 +910,7 @@ const internal::VariadicDynCastAllOfMatcher<Stmt, SwitchCase> switchCase;
 const internal::VariadicDynCastAllOfMatcher<Stmt, CaseStmt> caseStmt;
 const internal::VariadicDynCastAllOfMatcher<Stmt, DefaultStmt> defaultStmt;
 const internal::VariadicDynCastAllOfMatcher<Stmt, CompoundStmt> compoundStmt;
+const internal::VariadicDynCastAllOfMatcher<Stmt, CXXAtomicStmt> cxxAtomicStmt;
 const internal::VariadicDynCastAllOfMatcher<Stmt, CoroutineBodyStmt>
     coroutineBodyStmt;
 const internal::VariadicDynCastAllOfMatcher<Stmt, CXXCatchStmt> cxxCatchStmt;
