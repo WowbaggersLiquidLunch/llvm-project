@@ -2224,6 +2224,8 @@ enum CXCursorKind {
   CXCursor_FirstExtraDecl = CXCursor_ModuleImportDecl,
   CXCursor_LastExtraDecl = CXCursor_ConceptDecl,
 
+  CXCursor_CXXAtomicStmt = 605,
+
   /**
    * A code completion overload candidate.
    */

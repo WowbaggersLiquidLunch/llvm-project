@@ -5669,6 +5669,8 @@ CXString clang_getCursorKindSpelling(enum CXCursorKind Kind) {
     return cxstring::createRef("LabelStmt");
   case CXCursor_CompoundStmt:
     return cxstring::createRef("CompoundStmt");
+  case CXCursor_CXXAtomicStmt:
+    return cxstring::createRef("CXXAtomicStmt");
   case CXCursor_CaseStmt:
     return cxstring::createRef("CaseStmt");
   case CXCursor_DefaultStmt:

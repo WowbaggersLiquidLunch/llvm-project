@@ -352,6 +352,10 @@ CXCursor cxcursor::MakeCXCursor(const Stmt *S, const Decl *Parent,
     K = CXCursor_CompoundStmt;
     break;
 
+  case Stmt::CXXAtomicStmtClass:
+    K = CXCursor_CXXAtomicStmt;
+    break;
+
   case Stmt::NullStmtClass:
     K = CXCursor_NullStmt;
     break;
