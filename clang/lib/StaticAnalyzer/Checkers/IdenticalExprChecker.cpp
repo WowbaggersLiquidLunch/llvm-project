@@ -447,6 +447,11 @@ static bool isIdenticalStmt(const ASTContext &Ctx, const Stmt *Stmt1,
 
     return true;
   }
+  case Stmt::CXXAtomicStmtClass: {
+    const CompoundStmt *body1 = cast<CXXAtomicStmt>(Stmt1)->getBody();
+    const CompoundStmt *body2 = cast<CXXAtomicStmt>(Stmt2)->getBody();
+    return isIdenticalStmt(Ctx, body1, body2);
+  }
   case Stmt::CompoundAssignOperatorClass:
   case Stmt::BinaryOperatorClass: {
     const BinaryOperator *BinOp1 = cast<BinaryOperator>(Stmt1);
