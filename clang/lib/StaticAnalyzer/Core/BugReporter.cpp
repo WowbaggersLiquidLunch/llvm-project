@@ -654,6 +654,7 @@ getEnclosingStmtLocation(const Stmt *S, const LocationContext *LC,
         break;
       }
       case Stmt::CompoundStmtClass:
+      case Stmt::CXXAtomicStmtClass:
       case Stmt::StmtExprClass:
         return PathDiagnosticLocation(S, SMgr, LC);
       case Stmt::ChooseExprClass:
