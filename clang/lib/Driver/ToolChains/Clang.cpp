@@ -6508,6 +6508,10 @@ void Clang::ConstructJob(Compilation &C, const JobAction &JA,
       types::isCXX(InputType))
     CmdArgs.push_back("-fcoro-aligned-allocation");
 
+  if (Args.hasFlag(options::OPT_ftm_ts, options::OPT_fno_tm_ts, false) &&
+      types::isCXX(InputType))
+    CmdArgs.push_back("-ftm-ts");
+
   Args.AddLastArg(CmdArgs, options::OPT_fdouble_square_bracket_attributes,
                   options::OPT_fno_double_square_bracket_attributes);
 

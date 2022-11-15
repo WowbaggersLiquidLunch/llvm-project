@@ -11,6 +11,8 @@
 // RUN: %clang_cc1 -std=c++14 -fchar8_t -DNO_EXCEPTIONS -DCHAR8_T -verify -fsized-deallocation %s
 // RUN: %clang_cc1 -std=c++2a -fno-char8_t -DNO_EXCEPTIONS -DNO_CHAR8_T -verify -fsized-deallocation %s
 
+// RUN: %clang_cc1 -ftm-ts -DTM_TS -verify %s
+
 // expected-no-diagnostics
 
 // FIXME using `defined` in a macro has undefined behavior.
@@ -355,4 +357,10 @@
 
 #if defined(NO_EXCEPTIONS) ? check(exceptions, 0, 0, 0, 0, 0, 0) : check(exceptions, 199711, 199711, 199711, 199711, 199711, 199711)
 #error "wrong value for __cpp_exceptions"
+#endif
+
+// --- TS features --
+
+#if defined(TM_TS) ? check(transactional_memory, 202110, 202110, 202110, 202110, 202110, 202110) : check(transactional_memory, 0, 0, 0, 0, 0, 0)
+#error "wrong value for _cpp_transactional_memory"
 #endif

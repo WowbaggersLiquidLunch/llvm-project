@@ -133,6 +133,11 @@ C2x Feature Support
   removed, as this is no longer a GNU extension but a C2x extension. You can
   use ``-Wno-c2x-extensions`` to silence the extension warning instead.
 
+C++ TS Feature Support
+^^^^^^^^^^^^^^^^^^^^^^
+
+- Added Transactional Memory feature test macro ``__cpp_transactional_memory`` with value ``202110`` (`N4923 <wg21.link/N4923>`).
+
 Non-comprehensive list of changes in this release
 -------------------------------------------------
 - Clang now saves the address of ABI-indirect function parameters on the stack,
@@ -149,6 +154,8 @@ Non-comprehensive list of changes in this release
 
 New Compiler Flags
 ------------------
+
+- Added ``-ftm-ts`` flag to enable (and ``-fnotm-ts`` to disable) C++ Transactional Memory support as defined by `N4923 <wg21.link/N4923>`.
 
 Deprecated Compiler Flags
 -------------------------

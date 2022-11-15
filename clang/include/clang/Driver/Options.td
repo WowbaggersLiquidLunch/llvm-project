@@ -1252,6 +1252,12 @@ defm coro_aligned_allocation : BoolFOption<"coro-aligned-allocation",
   PosFlag<SetTrue, [CC1Option], "Prefer aligned allocation for C++ Coroutines">,
   NegFlag<SetFalse>>;
 
+  // C++ Transactional Memory TS
+defm tm_ts : BoolFOption<"tm-ts",
+  LangOpts<"TransactionalMemoryTS">, DefaultFalse,
+  PosFlag<SetTrue, [CC1Option], "Enable support for the C++ Transactional Memory TS">,
+  NegFlag<SetFalse>>;
+
 defm experimental_library : BoolFOption<"experimental-library",
   LangOpts<"ExperimentalLibrary">, DefaultFalse,
   PosFlag<SetTrue, [CC1Option, CoreOption], "Control whether unstable and experimental library features are enabled. "

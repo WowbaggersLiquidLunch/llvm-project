@@ -117,6 +117,7 @@ static bool hasFeature(StringRef Feature, const LangOptions &LangOpts,
                         .Case("objc_arc", LangOpts.ObjCAutoRefCount)
                         .Case("opencl", LangOpts.OpenCL)
                         .Case("tls", Target.isTLSSupported())
+                        .Case("tm", LangOpts.TransactionalMemoryTS)
                         .Case("zvector", LangOpts.ZVector)
                         .Default(Target.hasFeature(Feature) ||
                                  isPlatformEnvironment(Target, Feature));
