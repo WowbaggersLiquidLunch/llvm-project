@@ -2179,6 +2179,7 @@ private:
   //===--------------------------------------------------------------------===//
   // C++ Transactional Memory version 2 TS (N4923): Atomic Statements
   StmtResult ParseCXXAtomicStatement();
+  StmtResult ParseTransaction();
 
   //===--------------------------------------------------------------------===//
   // MS: SEH Statements and Blocks

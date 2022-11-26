@@ -962,13 +962,23 @@ StmtResult Parser::ParseCXXAtomicStatement() {
     return StmtError();
   }
 
-  auto Body = ParseCompoundStatement().get();
+  auto Body = ParseTransaction().get();
   return Actions.ActOnCXXAtomicStmt(ALoc, cast<clang::CompoundStmt>(Body));
 }
 
+constexpr unsigned getCompoundStatementScopeFlags() {
+  return Scope::DeclScope | Scope::CompoundStmtScope;
+}
+
+/// ParseTransaction - Parse a transaction block (i.e. a '{}' block prefixed by
+/// the `atomic do` keyword).
+StmtResult Parser::ParseTransaction() {
+  auto ScopeFlags = getCompoundStatementScopeFlags() | Scope::TransactionScope;
+  return ParseCompoundStatement(false, ScopeFlags);
+}
+
 StmtResult Parser::ParseCompoundStatement(bool isStmtExpr) {
-  return ParseCompoundStatement(isStmtExpr,
-                                Scope::DeclScope | Scope::CompoundStmtScope);
+  return ParseCompoundStatement(isStmtExpr, getCompoundStatementScopeFlags());
 }
 
 /// ParseCompoundStatement - Parse a "{}" block.

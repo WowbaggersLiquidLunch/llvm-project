@@ -46,8 +46,14 @@ void Scope::setFlags(Scope *parent, unsigned flags) {
     // transmit the parent's 'order' flag, if exists
     if (parent->getFlags() & OpenMPOrderClauseScope)
       Flags |= OpenMPOrderClauseScope;
+    if (isTransactionScope()) {
+      TransactionDepth = parent->TransactionDepth + 1;
+    } else {
+      TransactionDepth = parent->TransactionDepth;
+    }
   } else {
     Depth = 0;
+    TransactionDepth = 0;
     PrototypeDepth = 0;
     PrototypeIndex = 0;
     MSLastManglingParent = FnParent = BlockParent = nullptr;

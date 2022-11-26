@@ -150,6 +150,9 @@ public:
     /// template scope in between), the outer scope does not increase the
     /// depth of recursion.
     LambdaScope = 0x8000000,
+
+    /// This is a scope that defines the boundary of a transaction.
+    TransactionScope = 0x10000000,
   };
 
 private:
@@ -164,6 +167,11 @@ private:
   /// Depth - This is the depth of this scope.  The translation-unit scope has
   /// depth 0.
   unsigned short Depth;
+
+  /// TransactionDepth - This is the transaction depth of the scope, i.e. the
+  /// number of nested transaction layers this scope lives in. The
+  /// translation-unit scope has depth 0.
+  unsigned short TransactionDepth;
 
   /// Declarations with static linkage are mangled with the number of
   /// scopes seen as a component.
@@ -301,6 +309,8 @@ public:
 
   /// Returns the depth of this scope. The translation-unit has scope depth 0.
   unsigned getDepth() const { return Depth; }
+
+  bool isTransactionScope() const { return Flags & TransactionScope; }
 
   /// Returns the number of function prototype scopes in this scope
   /// chain.
