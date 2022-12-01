@@ -169,6 +169,9 @@ void CodeGenFunction::EmitStmt(const Stmt *S, ArrayRef<const Attr *> Attrs) {
     EmitCapturedStmt(*CS, CS->getCapturedRegionKind());
     }
     break;
+  case Stmt::CXXAtomicStmtClass:
+    EmitCXXAtomicStmt(cast<CXXAtomicStmt>(*S));
+    break;
   case Stmt::ObjCAtTryStmtClass:
     EmitObjCAtTryStmt(cast<ObjCAtTryStmt>(*S));
     break;
@@ -539,6 +542,31 @@ CodeGenFunction::EmitCompoundStmtWithoutScope(const CompoundStmt &S,
   }
 
   return RetAlloca;
+}
+
+namespace {
+/// A cleanup operation performed when the program exits from a transaction.
+struct TransactionEnd final : EHScopeStack::Cleanup {
+  void Emit(CodeGenFunction &CGF, Flags flags) override {
+    // Exits the transaction.
+    CGF.EmitCXXTransactionBoundary(CodeGenFunction::TransactionBoundary::End);
+  }
+};
+} // namespace
+
+void CodeGenFunction::EmitCXXAtomicStmt(const CXXAtomicStmt &S) {
+  // Keep track of the current cleanup stack depth, including debug scopes.
+  LexicalScope Scope(*this, S.getSourceRange());
+  // Enters the transaction.
+  EmitCXXTransactionBoundary(CodeGenFunction::TransactionBoundary::Start);
+  // Automatically exits the transaction via cleanup when exiting the scope.
+  // IMPORTANT: Do not set any other cleanup before this one in this scope!
+  // This must be the last cleanup for the transaction, otherwise the lifetime
+  // of objects instantiated in the transaction can interleave with that of the
+  // transaction.
+  EHStack.pushCleanup<TransactionEnd>(NormalCleanup);
+  // FIXME: Should we use `EmitCompoundStmtWithoutScope` instead?
+  EmitCompoundStmt(*S.getBody());
 }
 
 void CodeGenFunction::SimplifyForwardingBlocks(llvm::BasicBlock *BB) {

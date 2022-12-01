@@ -3237,6 +3237,8 @@ public:
                                        AggValueSlot AVS =
                                                 AggValueSlot::ignored());
 
+  void EmitCXXAtomicStmt(const CXXAtomicStmt &S);
+
   /// EmitLabel - Emit the block for the given label. It is legal to call this
   /// function even if there is no current insertion point.
   void EmitLabel(const LabelDecl *D); // helper for EmitLabelStmt.
