@@ -5510,6 +5510,7 @@ AST_POLYMORPHIC_MATCHER_P(
     hasBody,
     AST_POLYMORPHIC_SUPPORTED_TYPES(DoStmt, ForStmt, WhileStmt, CXXForRangeStmt,
                                     FunctionDecl, CoroutineBodyStmt),
+//                                  CXXAtomicStmt), // FIXME: is this correct here or is it only for loops?
     internal::Matcher<Stmt>, InnerMatcher) {
   if (Finder->isTraversalIgnoringImplicitNodes() && isDefaultedHelper(&Node))
     return false;

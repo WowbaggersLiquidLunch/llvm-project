@@ -2159,7 +2159,7 @@ TEST(HasAnySubstatement, MatchesForTopLevelCompoundStatement) {
   EXPECT_TRUE(matches("void f() { for (;;); }",
                       compoundStmt(hasAnySubstatement(forStmt()))));
 }
-
+// TODO: Test atomic statement
 TEST(HasAnySubstatement, IsNotRecursive) {
   // It's really "has any immediate substatement".
   EXPECT_TRUE(notMatches("void f() { if (true) for (;;); }",

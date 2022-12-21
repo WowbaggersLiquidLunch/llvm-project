@@ -5248,6 +5248,7 @@ static EvalStmtResult EvaluateStmt(StmtResult &Result, EvalInfo &Info,
       EvalStmtResult ESR = EvaluateStmt(Result, Info, BI, Case);
       if (ESR == ESR_Succeeded)
         Case = nullptr;
+      // TODO: Continue evaluating after atomic statment returns failure.
       else if (ESR != ESR_CaseNotFound) {
         if (ESR != ESR_Failed && !Scope.destroy())
           return ESR_Failed;

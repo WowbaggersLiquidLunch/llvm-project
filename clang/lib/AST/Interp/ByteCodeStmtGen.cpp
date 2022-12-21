@@ -160,6 +160,7 @@ bool ByteCodeStmtGen<Emitter>::visitStmt(const Stmt *S) {
   switch (S->getStmtClass()) {
   case Stmt::CompoundStmtClass:
     return visitCompoundStmt(cast<CompoundStmt>(S));
+  case Stmt::CXXAtomicStmtClass: return false; // FIXME: Add support for byte code interpreter.
   case Stmt::DeclStmtClass:
     return visitDeclStmt(cast<DeclStmt>(S));
   case Stmt::ReturnStmtClass:

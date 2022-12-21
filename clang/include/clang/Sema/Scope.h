@@ -312,6 +312,8 @@ public:
 
   bool isTransactionScope() const { return Flags & TransactionScope; }
 
+  unsigned short getTransactionDepth() const { return TransactionDepth; }
+
   /// Returns the number of function prototype scopes in this scope
   /// chain.
   unsigned getFunctionPrototypeDepth() const {

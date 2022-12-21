@@ -125,7 +125,7 @@ public:
     BinaryOperatorEQ,
     BinaryOperatorNE,
     // The preceding values are available since PGO_HASH_V2.
-
+    // FIXME: Should I add atomic statment here? Coroutine is not handled here so maybe I don't need to handle atomic do either?
     // Keep this last.  It's for the static assert that follows.
     LastHashType
   };

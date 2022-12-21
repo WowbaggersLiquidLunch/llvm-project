@@ -15245,7 +15245,8 @@ Decl *Sema::ActOnStartOfFunctionDef(Scope *FnBodyScope, Decl *D,
   // Builtin functions cannot be defined.
   if (unsigned BuiltinID = FD->getBuiltinID()) {
     if (!Context.BuiltinInfo.isPredefinedLibFunction(BuiltinID) &&
-        !Context.BuiltinInfo.isPredefinedRuntimeFunction(BuiltinID)) {
+        !Context.BuiltinInfo.isPredefinedRuntimeFunction(BuiltinID) /*&&
+        !Context.BuiltinInfo.definesTransactionBoundary(BuiltinID)*/) {
       Diag(FD->getLocation(), diag::err_builtin_definition) << FD;
       FD->setInvalidDecl();
     }

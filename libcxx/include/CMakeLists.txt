@@ -817,6 +817,7 @@ set(files
   experimental/set
   experimental/simd
   experimental/string
+  experimental/transactional_memory
   experimental/type_traits
   experimental/unordered_map
   experimental/unordered_set

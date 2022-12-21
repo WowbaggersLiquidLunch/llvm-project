@@ -1422,7 +1422,7 @@ CanThrowResult Sema::canThrow(const Stmt *S) {
   case Stmt::ContinueStmtClass:
   case Stmt::CoreturnStmtClass:
   case Stmt::CoroutineBodyStmtClass:
-  case Stmt::CXXAtomicStmtClass:
+  case Stmt::CXXAtomicStmtClass: // FIXME: throw escaping an `atomic do` is undefined
   case Stmt::CXXCatchStmtClass:
   case Stmt::CXXForRangeStmtClass:
   case Stmt::DefaultStmtClass:

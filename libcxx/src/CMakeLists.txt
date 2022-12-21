@@ -330,6 +330,7 @@ add_custom_target(cxx DEPENDS ${LIBCXX_BUILD_TARGETS})
 
 set(LIBCXX_EXPERIMENTAL_SOURCES
   experimental/memory_resource.cpp
+  experimental/transactional_memory.cpp
   format.cpp
   )
 

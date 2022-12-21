@@ -976,7 +976,7 @@ struct CounterCoverageMappingBuilder
                                  MappingRegions);
     Writer.write(OS);
   }
-
+  // FIXME: Should I add a function for atomic do here? Seems PGO related too.
   void VisitStmt(const Stmt *S) {
     if (S->getBeginLoc().isValid())
       extendRegion(S);

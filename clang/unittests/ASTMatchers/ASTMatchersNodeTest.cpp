@@ -1175,7 +1175,7 @@ TEST_P(ASTMatchersTest, CompoundStatement_DoesNotMatchEmptyStruct) {
   EXPECT_TRUE(
       matches("namespace n { struct S { void f() {{}} }; }", compoundStmt()));
 }
-
+// TODO: Test atomic statement
 TEST_P(ASTMatchersTest, CastExpr_MatchesExplicitCasts) {
   EXPECT_TRUE(matches("void *p = (void *)(&p);", castExpr()));
 }
