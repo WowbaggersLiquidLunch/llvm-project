@@ -4521,6 +4521,28 @@ public:
 
   RValue EmitAtomicExpr(AtomicExpr *E);
 
+  class TransactionBoundary {
+  public:
+    enum BackingStorage { Start, End };
+    TransactionBoundary() = default;
+    constexpr TransactionBoundary(BackingStorage backingStorage)
+        : backingStorage(backingStorage) {}
+    // Allow switching over and comparing an instance using the backing enum.
+    constexpr operator BackingStorage() const { return backingStorage; }
+    // Disallow treating it as a Boolean value.
+    explicit operator bool() const = delete;
+
+  private:
+    BackingStorage backingStorage;
+
+  public:
+    StringRef functionName() const;
+  };
+  
+  /// Emits a function call that form a transaction's given boundary.
+  /// \param boundary: The start or end boundary.
+  void EmitCXXTransactionBoundary(TransactionBoundary boundary);
+
   //===--------------------------------------------------------------------===//
   //                         Annotations Emission
   //===--------------------------------------------------------------------===//
