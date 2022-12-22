@@ -327,7 +327,7 @@ Retry:
     Res = ParseReturnStatement();
     SemiError = "return";
     break;
-  case tok::kw_co_return:            // C++ Coroutines: co_return statement
+  case tok::kw_co_return:           // C++ Coroutines: co_return-statement
     Res = ParseReturnStatement();
     SemiError = "co_return";
     break;

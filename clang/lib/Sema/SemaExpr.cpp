@@ -7106,7 +7106,7 @@ ExprResult Sema::BuildCallExpr(Scope *Scope, Expr *Fn, SourceLocation LParenLoc,
 }
 
 /// BuildBuiltinCallExpr - Create a call to a builtin function specified by Id
-//  with the specified CallArgs
+/// with the specified CallArgs
 Expr *Sema::BuildBuiltinCallExpr(SourceLocation Loc, Builtin::ID Id,
                                  MultiExprArg CallArgs) {
   StringRef Name = Context.BuiltinInfo.getName(Id);
