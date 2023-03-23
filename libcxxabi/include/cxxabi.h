@@ -160,6 +160,10 @@ __cxa_decrement_exception_refcount(void *primary_exception) throw();
 extern _LIBCXXABI_FUNC_VIS bool __cxa_uncaught_exception() throw();
 extern _LIBCXXABI_FUNC_VIS unsigned int __cxa_uncaught_exceptions() throw();
 
+// C++ Transactional Memory TS (N4923)
+extern _LIBCXXABI_FUNC_VIS void __cxa_enter_transaction();
+extern _LIBCXXABI_FUNC_VIS void __cxa_exit_transaction();
+
 #if defined(__linux__) || defined(__Fuchsia__)
 // Linux and Fuchsia TLS support. Not yet an official part of the Itanium ABI.
 // https://sourceware.org/glibc/wiki/Destructor%20support%20for%20thread_local%20variables
