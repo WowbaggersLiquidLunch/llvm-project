@@ -193,6 +193,10 @@ Retry:
   case tok::identifier:
   ParseIdentifier: {
     Token Next = NextToken();
+    if (getLangOpts().TransactionalMemoryTS &&
+        Tok.isSpecialIdentifierAtomic() && Next.is(tok::kw_do))
+      return ParseCXXAtomicStatement();
+
     if (Next.is(tok::colon)) { // C99 6.8.1: labeled-statement
       // Both C++11 and GNU attributes preceding the label appertain to the
       // label, so put them in a single list to pass on to
@@ -942,6 +946,24 @@ StmtResult Parser::ParseDefaultStatement(ParsedStmtContext StmtCtx) {
 
   return Actions.ActOnDefaultStmt(DefaultLoc, ColonLoc,
                                   SubStmt.get(), getCurScope());
+}
+
+/// ParseCXXAtomicStatement - Parse an atomic statment.
+StmtResult Parser::ParseCXXAtomicStatement() {
+  assert(Tok.isSpecialIdentifierAtomic() &&
+         "Not an atomic stmt: missing 'atomic'!");
+  SourceLocation ALoc = ConsumeToken(); // eat the `atomic`.
+  assert(Tok.is(tok::kw_do) && "Not an atomic stmt: missing 'do'!");
+  ConsumeToken(); // eat the `do`.
+
+  if (Tok.isNot(tok::l_brace)) {
+    Diag(Tok, diag::err_expected_atomic_stmt_body);
+    SkipUntil(tok::semi, StopBeforeMatch);
+    return StmtError();
+  }
+
+  auto Body = ParseCompoundStatement().get();
+  return Actions.ActOnCXXAtomicStmt(ALoc, cast<clang::CompoundStmt>(Body));
 }
 
 StmtResult Parser::ParseCompoundStatement(bool isStmtExpr) {

@@ -657,6 +657,8 @@ def ext_consteval_if : ExtWarn<
 def warn_cxx20_compat_consteval_if : Warning<
   "consteval if is incompatible with C++ standards before C++2b">,
   InGroup<CXXPre2bCompat>, DefaultIgnore;
+def err_expected_atomic_stmt_body : Error<
+  "expected transaction body after 'atomic do' keyword">;
 
 def ext_init_statement : ExtWarn<
   "'%select{if|switch}0' initialization statements are a C++17 extension">,

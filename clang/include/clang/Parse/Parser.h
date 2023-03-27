@@ -2177,6 +2177,10 @@ private:
   StmtResult ParseCXXCatchBlock(bool FnCatch = false);
 
   //===--------------------------------------------------------------------===//
+  // C++ Transactional Memory version 2 TS (N4923): Atomic Statements
+  StmtResult ParseCXXAtomicStatement();
+
+  //===--------------------------------------------------------------------===//
   // MS: SEH Statements and Blocks
 
   StmtResult ParseSEHTryBlock();

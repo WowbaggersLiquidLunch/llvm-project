@@ -310,6 +310,10 @@ public:
   /// represented as characters between '<#' and '#>' in the source code. The
   /// lexer uses identifier tokens to represent placeholders.
   bool isEditorPlaceholder() const { return getFlag(IsEditorPlaceholder); }
+
+  /// Returns true if this token is `atomic`, an identifier with special meaning
+  /// (N4923).
+  bool isSpecialIdentifierAtomic() const;
 };
 
 /// Information about the conditional stack (\#if directives)

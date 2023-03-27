@@ -70,6 +70,12 @@ tok::ObjCKeywordKind Token::getObjCKeywordID() const {
   return specId ? specId->getObjCKeywordID() : tok::objc_not_keyword;
 }
 
+/// isSpecialIdentifierAtomic - Returns true if this token is `atomic`, an
+/// identifier with special meaning (N4923).
+bool Token::isSpecialIdentifierAtomic() const {
+  return is(tok::identifier) && getIdentifierInfo()->getName().equals("atomic");
+}
+
 //===----------------------------------------------------------------------===//
 // Lexer Class Implementation
 //===----------------------------------------------------------------------===//
