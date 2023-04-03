@@ -6162,6 +6162,8 @@ def note_enters_block_captures_non_trivial_c_struct : Note<
   "to destroy">;
 def note_enters_compound_literal_scope : Note<
   "jump enters lifetime of a compound literal that is non-trivial to destruct">;
+def note_enters_cxx_atomic : Note<
+  "jump bypasses setup of transaction">;
 
 def note_exits_cleanup : Note<
   "jump exits scope of variable with __attribute__((cleanup))">;
@@ -6207,6 +6209,8 @@ def note_exits_block_captures_non_trivial_c_struct : Note<
   "to destroy">;
 def note_exits_compound_literal_scope : Note<
   "jump exits lifetime of a compound literal that is non-trivial to destruct">;
+def note_exits_cxx_atomic: Note<
+  "jump bypasses teardown of transaction">;
 
 def err_func_returning_qualified_void : ExtWarn<
   "function cannot return qualified void type %0">,

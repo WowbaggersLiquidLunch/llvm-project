@@ -409,6 +409,20 @@ void JumpScopeChecker::BuildScopeInformation(Stmt *S,
     return;
   }
 
+  // `goto` into and indirect `goto` out of transaction (atomic statement body)
+  // is not allowed, because they bypass transaction set-up and tear-down, and
+  // make little semantic sense.
+  case Stmt::CXXAtomicStmtClass: {
+    CXXAtomicStmt *AS = cast<CXXAtomicStmt>(S);
+    unsigned NewParentScope = Scopes.size();
+    Scopes.push_back(GotoScope(ParentScope,
+                               diag::note_enters_cxx_atomic,
+                               diag::note_exits_cxx_atomic,
+                               AS->getSourceRange().getBegin()));
+    BuildScopeInformation(AS->getBody(), NewParentScope);
+    return;
+  }
+
   case Stmt::CXXTryStmtClass: {
     CXXTryStmt *TS = cast<CXXTryStmt>(S);
     {
@@ -949,8 +963,36 @@ void JumpScopeChecker::CheckJump(Stmt *From, Stmt *To, SourceLocation DiagLoc,
 
   unsigned CommonScope = GetDeepestCommonScope(FromScope, ToScope);
 
+  // Error on indirect `goto`s out of transactions (atomic statement bodies).
+  if (isa<IndirectGotoStmt>(From)) {
+    // If `FromScope` > `CommonScope`, then the jump goes through a less nested
+    // scope. Check if it crosses a transaction boundary along the way.
+    for (unsigned I = FromScope; I > CommonScope; I = Scopes[I].ParentScope) {
+      if (Scopes[I].InDiag == diag::note_exits_cxx_atomic) {
+        S.Diag(From->getBeginLoc(), diag::err_indirect_goto_in_protected_scope)
+        << isa<GCCAsmStmt>(From);
+//        S.Diag(From->getBeginLoc(), diag::note_exits_cxx_atomic);
+        break;
+      }
+    }
+  }
+
   // It's okay to jump out from a nested scope.
   if (CommonScope == ToScope) return;
+
+  // Error on `goto`s into transactions (atomic statement bodies).
+  if (isa<GotoStmt>(From)) {
+    // If `ToScope` > `CommonScope`, then the jump goes into a more nested
+    // scope (after jumping first to the deepest common scope). Check if it
+    // crosses a transaction boundary along the way.
+    for (unsigned I = ToScope; I > CommonScope; I = Scopes[I].ParentScope) {
+      if (Scopes[I].InDiag == diag::note_exits_cxx_atomic) {
+        S.Diag(To->getBeginLoc(), diag::err_goto_into_protected_scope);
+//        S.Diag(To->getBeginLoc(), diag::note_enters_cxx_atomic);
+        break;
+      }
+    }
+  }
 
   // Pull out (and reverse) any scopes we might need to diagnose skipping.
   SmallVector<unsigned, 10> ToScopesCXX98Compat;
