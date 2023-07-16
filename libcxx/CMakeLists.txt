@@ -101,6 +101,11 @@ option(LIBCXX_ENABLE_VENDOR_AVAILABILITY_ANNOTATIONS
    to provide compile-time errors when using features unavailable on some version of
    the shared library they shipped should turn this on and see `include/__availability`
    for more details." OFF)
+option(LIBCXX_BUILD_BITCODE
+  "Whether to build bitcode files for libc++.
+  This is useful for LLVM passes that need to instrument the standard library itself.
+  This option defaults to inherit from `LLVM_BUILD_BITCODE`; setting the value explicitly overrides the default."
+  ${LLVM_BUILD_BITCODE})
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(LIBCXX_DEFAULT_TEST_CONFIG "llvm-libc++-shared-gcc.cfg.in")
@@ -571,6 +576,12 @@ function(cxx_add_basic_build_flags target)
       target_compile_definitions(${target} PRIVATE -D_LIBCPP_LINK_RT_LIB)
     endif()
   endif()
+
+  # Compile to LLVM bitcode.
+  if (LIBCXX_BUILD_BITCODE)
+    target_add_compile_flags_if_supported(${target} PRIVATE -emit-llvm)
+    target_add_link_flags_if_supported(${target} PRIVATE -flto)
+  endif ()
 endfunction()
 
 # Warning flags ===============================================================

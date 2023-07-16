@@ -156,6 +156,7 @@ get_host_triple(LLVM_HOST_TRIPLE)
 set(LLVM_DEFAULT_TARGET_TRIPLE "${LLVM_HOST_TRIPLE}" CACHE STRING
   "Default target for which the runtimes will be built.")
 
+option(LLVM_BUILD_BITCODE "Build LLVM libraries and executables as LLVM bitcode. Default `OFF`." OFF)
 option(LLVM_INCLUDE_TESTS "Generate build targets for the runtimes unit tests." ON)
 option(LLVM_INCLUDE_DOCS "Generate build targets for the runtimes documentation." ON)
 option(LLVM_ENABLE_SPHINX "Use Sphinx to generate the runtimes documentation." OFF)
