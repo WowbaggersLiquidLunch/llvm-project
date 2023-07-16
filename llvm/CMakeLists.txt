@@ -696,6 +696,8 @@ if( CMAKE_SIZEOF_VOID_P EQUAL 8 AND NOT (WIN32 OR ${CMAKE_SYSTEM_NAME} MATCHES "
   option(LLVM_BUILD_32_BITS "Build 32 bits executables and libraries." OFF)
 endif()
 
+option(LLVM_BUILD_BITCODE "Build LLVM libraries and executables as LLVM bitcode. Default `OFF`." OFF)
+
 # Define the default arguments to use with 'lit', and an option for the user to
 # override.
 set(LIT_ARGS_DEFAULT "-sv")

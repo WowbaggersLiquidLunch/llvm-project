@@ -73,6 +73,11 @@ option(LIBCXXABI_BUILD_32_BITS "Build 32 bit multilib libc++abi. This option is 
 if (LIBCXXABI_BUILD_32_BITS)
   message(FATAL_ERROR "LIBCXXABI_BUILD_32_BITS is not supported anymore when building the runtimes, please specify a full triple instead.")
 endif()
+option(LIBCXXABI_BUILD_BITCODE
+  "Whether to build bitcode files for libc++abi.
+  This is useful for LLVM passes that need to instrument the standard library itself.
+  This option defaults to inherit from `LLVM_BUILD_BITCODE`; setting the value explicitly overrides the default."
+  ${LLVM_BUILD_BITCODE})
 
 option(LIBCXXABI_INCLUDE_TESTS "Generate build targets for the libc++abi unit tests." ${LLVM_INCLUDE_TESTS})
 set(LIBCXXABI_LIBDIR_SUFFIX "${LLVM_LIBDIR_SUFFIX}" CACHE STRING
@@ -271,6 +276,46 @@ add_definitions(-D_LIBCXXABI_BUILDING_LIBRARY)
 # libcxxabi needs to, for various reasons, include the libcpp headers as if
 # it is being built as part of libcxx.
 add_definitions(-D_LIBCPP_BUILDING_LIBRARY)
+
+# Compile to LLVM bitcode.
+if (LIBCXXABI_BUILD_BITCODE)
+  add_compile_flags_if_supported(-emit-llvm)
+  add_link_flags_if_supported(-flto)
+endif ()
+
+# Get warning flags
+add_compile_flags_if_supported(-Werror=return-type)
+add_compile_flags_if_supported(-W)
+add_compile_flags_if_supported(-Wall)
+add_compile_flags_if_supported(-Wchar-subscripts)
+add_compile_flags_if_supported(-Wconversion)
+add_compile_flags_if_supported(-Wmismatched-tags)
+add_compile_flags_if_supported(-Wmissing-braces)
+add_compile_flags_if_supported(-Wnewline-eof)
+add_compile_flags_if_supported(-Wunused-function)
+add_compile_flags_if_supported(-Wshadow)
+add_compile_flags_if_supported(-Wshorten-64-to-32)
+add_compile_flags_if_supported(-Wsign-compare)
+add_compile_flags_if_supported(-Wsign-conversion)
+add_compile_flags_if_supported(-Wstrict-aliasing=2)
+add_compile_flags_if_supported(-Wstrict-overflow=4)
+add_compile_flags_if_supported(-Wunused-parameter)
+add_compile_flags_if_supported(-Wunused-variable)
+add_compile_flags_if_supported(-Wwrite-strings)
+add_compile_flags_if_supported(-Wundef)
+
+add_compile_flags_if_supported(-Wno-suggest-override)
+
+if (LIBCXXABI_ENABLE_WERROR)
+  add_compile_flags_if_supported(-Werror)
+  add_compile_flags_if_supported(-WX)
+else()
+  add_compile_flags_if_supported(-Wno-error)
+  add_compile_flags_if_supported(-WX-)
+endif()
+if (LIBCXXABI_ENABLE_PEDANTIC)
+  add_compile_flags_if_supported(-pedantic)
+endif()
 
 # Get feature flags.
 add_compile_flags_if_supported(-fstrict-aliasing)

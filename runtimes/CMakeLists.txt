@@ -170,6 +170,7 @@ message(STATUS "LLVM default target triple: ${LLVM_DEFAULT_TARGET_TRIPLE}")
 
 set(LLVM_TARGET_TRIPLE "${LLVM_DEFAULT_TARGET_TRIPLE}")
 
+option(LLVM_BUILD_BITCODE "Build LLVM libraries and executables as LLVM bitcode. Default `OFF`." OFF)
 option(LLVM_INCLUDE_TESTS "Generate build targets for the runtimes unit tests." ON)
 option(LLVM_INCLUDE_DOCS "Generate build targets for the runtimes documentation." ON)
 option(LLVM_ENABLE_SPHINX "Use Sphinx to generate the runtimes documentation." OFF)

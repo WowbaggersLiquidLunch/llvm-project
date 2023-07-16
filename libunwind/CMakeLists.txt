@@ -34,6 +34,11 @@ option(LIBUNWIND_BUILD_32_BITS "Build 32 bit multilib libunwind. This option is 
 if (LIBUNWIND_BUILD_32_BITS)
   message(FATAL_ERROR "LIBUNWIND_BUILD_32_BITS is not supported anymore when building the runtimes, please specify a full triple instead.")
 endif()
+option(LIBUNWIND_BUILD_BITCODE
+  "Whether to build bitcode files for libunwind.
+  This is useful for LLVM passes that need to instrument the unwinder itself.
+  This option defaults to inherit from `LLVM_BUILD_BITCODE`; setting the value explicitly overrides the default."
+  ${LLVM_BUILD_BITCODE})
 
 option(LIBUNWIND_ENABLE_CET "Build libunwind with CET enabled." OFF)
 option(LIBUNWIND_ENABLE_ASSERTIONS "Enable assertions independent of build mode." ON)
@@ -185,6 +190,34 @@ if (LIBUNWIND_ENABLE_CET)
     message(SEND_ERROR "Compiler doesn't support CET -mshstk option!")
   endif()
 endif()
+
+# Compile to LLVM bitcode.
+if (LIBUNWIND_BUILD_BITCODE)
+  add_compile_flags_if_supported(-emit-llvm)
+  add_link_flags_if_supported(-flto)
+endif ()
+
+# Get warning flags
+add_compile_flags_if_supported(-W)
+add_compile_flags_if_supported(-Wall)
+add_compile_flags_if_supported(-Wchar-subscripts)
+add_compile_flags_if_supported(-Wconversion)
+add_compile_flags_if_supported(-Wmismatched-tags)
+add_compile_flags_if_supported(-Wmissing-braces)
+add_compile_flags_if_supported(-Wnewline-eof)
+add_compile_flags_if_supported(-Wno-unused-function)
+add_compile_flags_if_supported(-Wshadow)
+add_compile_flags_if_supported(-Wshorten-64-to-32)
+add_compile_flags_if_supported(-Wsign-compare)
+add_compile_flags_if_supported(-Wsign-conversion)
+add_compile_flags_if_supported(-Wstrict-aliasing=2)
+add_compile_flags_if_supported(-Wstrict-overflow=4)
+add_compile_flags_if_supported(-Wunused-parameter)
+add_compile_flags_if_supported(-Wunused-variable)
+add_compile_flags_if_supported(-Wwrite-strings)
+add_compile_flags_if_supported(-Wundef)
+
+add_compile_flags_if_supported(-Wno-suggest-override)
 
 if (WIN32)
   # The headers lack matching dllexport attributes (_LIBUNWIND_EXPORT);
