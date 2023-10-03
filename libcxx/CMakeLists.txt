@@ -105,6 +105,11 @@ option(LIBCXX_ENABLE_STD_MODULES
     experimental and has additional dependencies. Only enable this when
     interested in testing or developing this module. See
     https://libcxx.llvm.org/Modules.html for more information." OFF)
+option(LIBCXX_BUILD_BITCODE
+  "Whether to build bitcode files for libc++.
+  This is useful for LLVM passes that need to instrument the standard library itself.
+  This option defaults to inherit from `LLVM_BUILD_BITCODE`; setting the value explicitly overrides the default."
+  ${LLVM_BUILD_BITCODE})
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(LIBCXX_DEFAULT_TEST_CONFIG "llvm-libc++-shared-gcc.cfg.in")
@@ -540,6 +545,12 @@ function(cxx_add_basic_build_flags target)
     endif()
   endif()
   target_compile_options(${target} PUBLIC "${LIBCXX_ADDITIONAL_COMPILE_FLAGS}")
+
+  # Compile to LLVM bitcode.
+  if (LIBCXX_BUILD_BITCODE)
+    target_add_compile_flags_if_supported(${target} PRIVATE -emit-llvm)
+    target_add_link_flags_if_supported(${target} PRIVATE -flto)
+  endif ()
 endfunction()
 
 # Exception flags =============================================================
